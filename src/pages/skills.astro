@@ -1,0 +1,282 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skillGroups = [
+  {
+    category: 'Análisis',
+    color: 'purple',
+    icon: '🔍',
+    desc: 'Skills responsables de transformar requerimientos en bruto en contexto estructurado y actionable.',
+    skills: [
+      {
+        name: 'analyze-initiative',
+        title: 'Analyze Initiative',
+        agent: 'context-analyzer',
+        desc: 'Analiza iniciativas de negocio en formato PDF, Markdown o texto plano. Detecta requerimientos, los agrupa por lógica funcional y genera escenarios de prueba en formato Gherkin (Dado / Cuando / Entonces).',
+        generates: 'iniciativa.json (grupos funcionales + escenarios Gherkin)',
+      },
+      {
+        name: 'detect-architecture',
+        title: 'Detect Architecture',
+        agent: 'context-analyzer',
+        desc: 'Analiza el código fuente del proyecto para detectar la arquitectura implementada (Hexagonal, DDD, Clean Architecture). Extrae convenciones de naming, patrones de testing, integraciones (APIs, BD, servicios externos) y contexto completo del tech stack.',
+        generates: 'architecture-constraints.json (arquitectura, convenciones, integraciones)',
+      },
+    ],
+  },
+  {
+    category: 'Planificación',
+    color: 'amber',
+    icon: '🏗️',
+    desc: 'Skills que transforman la iniciativa analizada y la arquitectura detectada en un plan de implementación preciso.',
+    skills: [
+      {
+        name: 'plan-implementation',
+        title: 'Plan Implementation',
+        agent: 'architect-planner',
+        desc: 'Transforma la iniciativa estructurada (iniciativa.json) y las restricciones de arquitectura en un plan de implementación ordenado file-by-file. Incluye user stories derivadas de los grupos Gherkin, plan de pruebas y plan de commits siguiendo el estándar Conventional Commits extendido.',
+        generates: 'implementation-plan.json (HUs, archivos por capa, testplan, commitplan)',
+      },
+    ],
+  },
+  {
+    category: 'Implementación',
+    color: 'emerald',
+    icon: '⚙️',
+    desc: 'Skills que convierten el plan aprobado en código de producción funcional con cobertura de pruebas.',
+    skills: [
+      {
+        name: 'implement-code',
+        title: 'Implement Code',
+        agent: 'code-implementor',
+        desc: 'Ejecuta el plan de implementación aprobado (implementation-plan.json) archivo por archivo. Escribe código de producción y pruebas unitarias que respetan la arquitectura detectada, imitan los patrones existentes del proyecto y traducen cada escenario Gherkin a un test case real y ejecutable.',
+        generates: 'Código de producción + pruebas + implementation-report.json',
+      },
+    ],
+  },
+  {
+    category: 'Documentación Técnica',
+    color: 'teal',
+    icon: '📋',
+    desc: 'Skills especializados en la generación de documentación técnica formal para el equipo y para gestión de proyectos.',
+    skills: [
+      {
+        name: 'generate-requirements',
+        title: 'Generate Requirements',
+        agent: 'doc-generator',
+        desc: 'Genera los requerimientos no funcionales del sistema, especificaciones de integraciones técnicas, diagramas de arquitectura en formato Mermaid y una matriz de riesgos detallada. Es el primer paso de la cadena de documentación.',
+        generates: 'Requirements.json (NFRs, diagramas Mermaid, matriz de riesgos)',
+      },
+      {
+        name: 'generate-wiki',
+        title: 'Generate Wiki (TR.md)',
+        agent: 'doc-generator',
+        desc: 'Genera el documento de Technical Requirements (TR.md) en formato Markdown profesional. Incluye descripción funcional, historias de usuario con criterios de aceptación, especificaciones técnicas, diagramas de flujo y la información del equipo responsable.',
+        generates: 'TR.md — Documento de requerimientos técnicos completo',
+      },
+      {
+        name: 'generate-ifao',
+        title: 'Generate IFAO',
+        agent: 'doc-generator',
+        desc: 'Genera el Informe de Factibilidad y Alineación Operativa (IFAO.md), documento ejecutivo revisado por Product Owners, arquitectos y líderes técnicos. Incluye análisis de factibilidad, alineación estratégica, estimación de esfuerzo y recomendaciones.',
+        generates: 'IFAO.md — Informe ejecutivo de factibilidad',
+      },
+    ],
+  },
+  {
+    category: 'Integración Azure DevOps',
+    color: 'sky',
+    icon: '🔗',
+    desc: 'Skills que conectan el flujo de desarrollo con Azure DevOps para trazabilidad y gestión de trabajo.',
+    skills: [
+      {
+        name: 'create-azure-workitems',
+        title: 'Create Azure Work Items',
+        agent: 'azure-integrator',
+        desc: 'Crea la jerarquía completa de work items en Azure DevOps: Epic → Feature → User Stories → Tasks. Publica los documentos TR.md e IFAO.md en el Wiki del proyecto y configura los metadatos de cada ítem (area path, asignaciones, etc.).',
+        generates: 'Work items en Azure DevOps + Wiki actualizado + azure-workitems.json',
+      },
+      {
+        name: 'link-commits-to-workitems',
+        title: 'Link Commits to Work Items',
+        agent: 'azure-integrator',
+        desc: 'Vincula los commits de git realizados durante el Track B a sus work items correspondientes en Azure DevOps. Utiliza Hyperlinks para repositorios externos (GitHub) o ArtifactLinks para Azure Repos, con fallback a comentarios si el método principal falla.',
+        generates: 'Trazabilidad completa Commit → Historia de Usuario en Azure DevOps',
+      },
+    ],
+  },
+  {
+    category: 'Referencia Arquitectónica',
+    color: 'indigo',
+    icon: '📐',
+    desc: 'Skills de conocimiento que guían la toma de decisiones arquitectónicas durante el análisis y la planificación.',
+    skills: [
+      {
+        name: 'hexagonal-architect',
+        title: 'Hexagonal Architect',
+        agent: 'detect-architecture / architect-planner',
+        desc: 'Orquestador de arquitectura para proyectos que siguen los patrones Hexagonal, DDD y Clean Architecture. Combina patrones de implementación específicos del proyecto con principios avanzados de Domain-Driven Design: entidades con schema _entity, IUseCase<T,O>, wrappers shadcn, Next.js App Router y hooks React con inyección de dependencias.',
+        generates: 'Guía arquitectónica contextual para el planner',
+      },
+      {
+        name: 'clean-architecture',
+        title: 'Clean Architecture',
+        agent: 'detect-architecture / architect-planner',
+        desc: 'Principios y mejores prácticas de Clean Architecture según Robert C. Martin. Guía el diseño de capas, el establecimiento de límites entre ellas y la separación de responsabilidades. Se activa en tareas de diseño, revisión de estructura o refactorización.',
+        generates: 'Guía de principios para diseño de capas y límites',
+      },
+    ],
+  },
+  {
+    category: 'Especialistas',
+    color: 'rose',
+    icon: '🎯',
+    desc: 'Skills con funciones especializadas para roles específicos dentro del proceso de desarrollo.',
+    skills: [
+      {
+        name: 'product-owner',
+        title: 'Product Owner',
+        agent: 'Modo standalone',
+        desc: 'Agente Product Owner senior que analiza el codebase completo (arquitectura, complejidad, patrones existentes, deuda técnica) antes de iniciar cualquier conversación. Usa ese contexto para hacer preguntas informadas, refutar con fundamento técnico real y proponer cambios basados en evidencia del código, no en suposiciones.',
+        generates: 'Análisis técnico contextual desde perspectiva de PO',
+      },
+      {
+        name: 'skill-creator',
+        title: 'Skill Creator',
+        agent: 'Modo standalone',
+        desc: 'Crea nuevos skills, modifica y mejora skills existentes, y mide su desempeño. Permite extender el ecosistema de HEB-Automata con capacidades adicionales específicas para el equipo.',
+        generates: 'Nuevos skills personalizados para el ecosistema',
+      },
+    ],
+  },
+];
+
+const colorConfig: Record<string, { bg: string; text: string; border: string; tag: string; tagText: string; badge: string; badgeText: string }> = {
+  purple:  { bg: 'bg-purple-50',  text: 'text-purple-800',  border: 'border-purple-200',  tag: 'bg-purple-100',  tagText: 'text-purple-700',  badge: 'bg-purple-600',  badgeText: 'text-white' },
+  amber:   { bg: 'bg-amber-50',   text: 'text-amber-800',   border: 'border-amber-200',   tag: 'bg-amber-100',   tagText: 'text-amber-700',   badge: 'bg-amber-500',   badgeText: 'text-white' },
+  emerald: { bg: 'bg-emerald-50', text: 'text-emerald-800', border: 'border-emerald-200', tag: 'bg-emerald-100', tagText: 'text-emerald-700', badge: 'bg-emerald-600', badgeText: 'text-white' },
+  teal:    { bg: 'bg-teal-50',    text: 'text-teal-800',    border: 'border-teal-200',    tag: 'bg-teal-100',    tagText: 'text-teal-700',    badge: 'bg-teal-600',    badgeText: 'text-white' },
+  sky:     { bg: 'bg-sky-50',     text: 'text-sky-800',     border: 'border-sky-200',     tag: 'bg-sky-100',     tagText: 'text-sky-700',     badge: 'bg-sky-600',     badgeText: 'text-white' },
+  indigo:  { bg: 'bg-indigo-50',  text: 'text-indigo-800',  border: 'border-indigo-200',  tag: 'bg-indigo-100',  tagText: 'text-indigo-700',  badge: 'bg-indigo-600',  badgeText: 'text-white' },
+  rose:    { bg: 'bg-rose-50',    text: 'text-rose-800',    border: 'border-rose-200',    tag: 'bg-rose-100',    tagText: 'text-rose-700',    badge: 'bg-rose-600',    badgeText: 'text-white' },
+};
+---
+
+<Layout title="Skills" description="Los 13 skills de automatización del ecosistema HEB-Automata.">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-28 pb-20 overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-emerald-400 text-sm font-semibold uppercase tracking-widest mb-4">Capacidades</p>
+      <h1 class="text-6xl font-black text-white mb-5 tracking-tight">Skills de Automatización</h1>
+      <p class="text-2xl text-blue-100 font-medium mb-6">13 Capacidades Modulares Especializadas</p>
+      <p class="text-slate-300 text-lg leading-relaxed max-w-3xl">
+        Los skills son módulos de conocimiento y ejecución que los agentes invocan para realizar
+        tareas concretas. Cada skill encapsula lógica especializada, reglas de negocio y criterios
+        de calidad propios de su área de responsabilidad.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS POR CATEGORÍA ===== -->
+  <section class="bg-slate-50 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+      {skillGroups.map(group => {
+        const c = colorConfig[group.color];
+        return (
+          <div>
+            <!-- Group header -->
+            <div class="flex items-center gap-4 mb-8">
+              <div class={`w-12 h-12 ${c.tag} rounded-2xl flex items-center justify-center text-2xl flex-shrink-0`}>
+                {group.icon}
+              </div>
+              <div>
+                <h2 class="text-2xl font-black text-slate-900">{group.category}</h2>
+                <p class="text-slate-500 text-sm">{group.desc}</p>
+              </div>
+            </div>
+
+            <!-- Skill cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+              {group.skills.map(skill => (
+                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col">
+                  <div class={`px-6 py-4 ${c.bg} ${c.border} border-b flex items-center gap-3`}>
+                    <div>
+                      <code class={`text-xs font-bold font-mono ${c.text}`}>{skill.name}</code>
+                      <h3 class="text-slate-900 font-bold text-base">{skill.title}</h3>
+                    </div>
+                  </div>
+                  <div class="p-6 flex-1 flex flex-col">
+                    <p class="text-slate-600 text-sm leading-relaxed flex-1 mb-5">{skill.desc}</p>
+                    <div class="space-y-3">
+                      <div>
+                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1">Genera</p>
+                        <p class="text-slate-700 text-xs leading-relaxed">{skill.generates}</p>
+                      </div>
+                      <div>
+                        <p class="text-slate-400 text-xs font-semibold uppercase tracking-wide mb-1">Usado por</p>
+                        <code class="text-xs bg-slate-100 text-slate-600 px-2 py-1 rounded font-mono">{skill.agent}</code>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+
+  <!-- ===== TABLA RESUMEN ===== -->
+  <section class="bg-white py-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Referencia rápida</p>
+        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Tabla de Skills</h2>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-left">
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Skill</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Categoría</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Agente que lo invoca</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Archivo principal generado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {[
+                { name: 'analyze-initiative', cat: 'Análisis', agent: 'context-analyzer', file: 'iniciativa.json' },
+                { name: 'detect-architecture', cat: 'Análisis', agent: 'context-analyzer', file: 'architecture-constraints.json' },
+                { name: 'plan-implementation', cat: 'Planificación', agent: 'architect-planner', file: 'implementation-plan.json' },
+                { name: 'implement-code', cat: 'Implementación', agent: 'code-implementor', file: 'Código + pruebas' },
+                { name: 'generate-requirements', cat: 'Documentación', agent: 'doc-generator', file: 'Requirements.json' },
+                { name: 'generate-wiki', cat: 'Documentación', agent: 'doc-generator', file: 'TR.md' },
+                { name: 'generate-ifao', cat: 'Documentación', agent: 'doc-generator', file: 'IFAO.md' },
+                { name: 'create-azure-workitems', cat: 'Azure DevOps', agent: 'azure-integrator', file: 'azure-workitems.json + Wiki' },
+                { name: 'link-commits-to-workitems', cat: 'Azure DevOps', agent: 'azure-integrator', file: 'Trazabilidad en Azure' },
+                { name: 'hexagonal-architect', cat: 'Referencia', agent: 'architect-planner', file: 'Guía contextual' },
+                { name: 'clean-architecture', cat: 'Referencia', agent: 'architect-planner', file: 'Guía contextual' },
+                { name: 'product-owner', cat: 'Especialista', agent: 'Standalone', file: 'Análisis contextual' },
+                { name: 'skill-creator', cat: 'Especialista', agent: 'Standalone', file: 'Nuevos skills' },
+              ].map((row, i) => (
+                <tr class={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                  <td class="px-6 py-3.5 font-mono text-blue-700 text-xs font-semibold">{row.name}</td>
+                  <td class="px-6 py-3.5 text-slate-600 text-xs">{row.cat}</td>
+                  <td class="px-6 py-3.5 font-mono text-slate-500 text-xs">{row.agent}</td>
+                  <td class="px-6 py-3.5 text-slate-600 text-xs">{row.file}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>

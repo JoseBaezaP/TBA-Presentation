@@ -1,0 +1,288 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const agents = [
+  {
+    id: 'tba-orchestrator',
+    name: 'TBA Orchestrator',
+    role: 'Orquestador Principal',
+    model: 'Claude Sonnet 4.6',
+    color: 'blue',
+    icon: '🧠',
+    desc: 'Agente central del ecosistema. Recibe cada solicitud, la clasifica automáticamente y coordina a todos los demás agentes mediante un flujo de fases con gates de validación. Detecta sesiones previas interrumpidas y ofrece reanudación.',
+    inputs: ['PRD / Iniciativa (PDF, Markdown, texto)'],
+    outputs: ['Flujo SDD ejecutado', 'Resumen de entrega completo', '.tba-state.json'],
+    delegates: ['context-analyzer', 'architect-planner', 'doc-generator', 'azure-integrator', 'code-implementor', 'git-manager', 'simple-implementor'],
+  },
+  {
+    id: 'context-analyzer',
+    name: 'Context Analyzer',
+    role: 'Analista de Contexto',
+    model: 'Claude Sonnet 4.6',
+    color: 'purple',
+    icon: '🔍',
+    desc: 'Analiza iniciativas de negocio y proyectos de código fuente para generar contexto estructurado. Detecta automáticamente la arquitectura del proyecto (Hexagonal, DDD, Clean Architecture) y extrae requerimientos con escenarios Gherkin.',
+    inputs: ['PRD / iniciativa', 'Codebase del proyecto'],
+    outputs: ['iniciativa.json (grupos + Gherkin)', 'architecture-constraints.json'],
+    delegates: ['analyze-initiative', 'detect-architecture'],
+  },
+  {
+    id: 'architect-planner',
+    name: 'Architect Planner',
+    role: 'Arquitecto y Planificador',
+    model: 'Claude Opus 4.7',
+    modelBadge: 'Modelo más potente',
+    color: 'orange',
+    icon: '🏗️',
+    desc: 'Analiza la arquitectura del proyecto y genera un plan de implementación file-by-file detallado. Respeta las reglas arquitectónicas, convenciones de naming y patrones de testing existentes. Utiliza el modelo más avanzado disponible.',
+    inputs: ['iniciativa.json', 'architecture-constraints.json'],
+    outputs: ['implementation-plan.json (HUs + archivos + testplan + commitplan)'],
+    delegates: ['plan-implementation'],
+  },
+  {
+    id: 'code-implementor',
+    name: 'Code Implementor',
+    role: 'Implementador de Código',
+    model: 'Claude Sonnet 4.6',
+    color: 'emerald',
+    icon: '⚙️',
+    desc: 'Ejecuta el plan de implementación aprobado archivo por archivo. Escribe código de producción y pruebas unitarias que respetan la arquitectura detectada, mimetizan los patrones existentes y traducen los escenarios Gherkin a test cases reales.',
+    inputs: ['implementation-plan.json', 'Codebase del proyecto'],
+    outputs: ['Código de producción', 'Pruebas unitarias', 'implementation-report.json'],
+    delegates: ['implement-code'],
+  },
+  {
+    id: 'doc-generator',
+    name: 'Doc Generator',
+    role: 'Generador de Documentación',
+    model: 'Claude Sonnet 4.6',
+    color: 'teal',
+    icon: '📋',
+    desc: 'Genera documentación técnica formal a partir de las historias de usuario y el plan de implementación. Produce requerimientos no funcionales con diagramas Mermaid, el documento TR.md y el informe ejecutivo IFAO.md.',
+    inputs: ['iniciativa.json', 'implementation-plan.json', 'architecture-constraints.json'],
+    outputs: ['Requirements.json', 'TR.md (Technical Requirements)', 'IFAO.md (Factibilidad y Alineación)'],
+    delegates: ['generate-requirements', 'generate-wiki', 'generate-ifao'],
+  },
+  {
+    id: 'azure-integrator',
+    name: 'Azure Integrator',
+    role: 'Integrador Azure DevOps',
+    model: 'Claude Sonnet 4.6',
+    color: 'sky',
+    icon: '🔗',
+    desc: 'Crea la jerarquía completa de work items en Azure DevOps (Epic → Feature → User Stories → Tasks), publica la documentación técnica en el Wiki y vincula los commits de git a los work items para trazabilidad completa.',
+    inputs: ['iniciativa.json', 'TR.md', 'IFAO.md', 'commit-log.json'],
+    outputs: ['azure-workitems.json', 'Wiki actualizado en Azure DevOps', 'Commits vinculados a HUs'],
+    delegates: ['create-azure-workitems', 'link-commits-to-workitems'],
+  },
+  {
+    id: 'git-manager',
+    name: 'Git Manager',
+    role: 'Gestor de Versiones Git',
+    model: 'Claude Sonnet 4.6',
+    color: 'slate',
+    icon: '🌿',
+    desc: 'Especializado en operaciones git para el flujo Automata. Crea ramas feature/{nombre-iniciativa}, genera commits con formato Conventional Commits extendido (incluyendo refs de HUs y work items) y hace push al remoto. Nunca opera sobre main o master.',
+    inputs: ['Nombre de la iniciativa', 'Lista de archivos modificados', 'HUs del plan'],
+    outputs: ['Rama feature/ creada', 'Commits con formato extendido', 'Push al remoto (con autorización)'],
+    delegates: [],
+  },
+  {
+    id: 'simple-implementor',
+    name: 'Simple Implementor',
+    role: 'Implementador de Micro-Cambios',
+    model: 'Claude Sonnet 4.6',
+    color: 'amber',
+    icon: '⚡',
+    desc: 'Agente ligero para micro-changes puntuales que no requieren el flujo SDD completo. Localiza el archivo exacto mediante búsqueda, aplica el cambio puntual y delega a git-manager para un commit descriptivo. No genera documentación ni crea ramas nuevas.',
+    inputs: ['Descripción del cambio puntual (valor, texto, color, constante, imagen)'],
+    outputs: ['Cambio aplicado en archivo específico', '1 commit descriptivo', 'Push opcional'],
+    delegates: ['git-manager'],
+  },
+];
+
+const colorConfig: Record<string, { border: string; badge: string; badgeText: string; icon: string }> = {
+  blue:    { border: 'border-blue-500',    badge: 'bg-blue-100',    badgeText: 'text-blue-700',    icon: 'bg-blue-50' },
+  purple:  { border: 'border-purple-500',  badge: 'bg-purple-100',  badgeText: 'text-purple-700',  icon: 'bg-purple-50' },
+  orange:  { border: 'border-orange-500',  badge: 'bg-orange-100',  badgeText: 'text-orange-700',  icon: 'bg-orange-50' },
+  emerald: { border: 'border-emerald-500', badge: 'bg-emerald-100', badgeText: 'text-emerald-700', icon: 'bg-emerald-50' },
+  teal:    { border: 'border-teal-500',    badge: 'bg-teal-100',    badgeText: 'text-teal-700',    icon: 'bg-teal-50' },
+  sky:     { border: 'border-sky-500',     badge: 'bg-sky-100',     badgeText: 'text-sky-700',     icon: 'bg-sky-50' },
+  slate:   { border: 'border-slate-400',   badge: 'bg-slate-100',   badgeText: 'text-slate-700',   icon: 'bg-slate-50' },
+  amber:   { border: 'border-amber-500',   badge: 'bg-amber-100',   badgeText: 'text-amber-700',   icon: 'bg-amber-50' },
+};
+---
+
+<Layout title="Agentes" description="Los 8 agentes especializados del ecosistema HEB-Automata.">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-28 pb-20 overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-emerald-400 text-sm font-semibold uppercase tracking-widest mb-4">Ecosistema</p>
+      <h1 class="text-6xl font-black text-white mb-5 tracking-tight">Agentes Especializados</h1>
+      <p class="text-2xl text-blue-100 font-medium mb-6">8 Expertos Autónomos Coordinados</p>
+      <p class="text-slate-300 text-lg leading-relaxed max-w-3xl">
+        Cada agente domina un área específica del proceso de desarrollo. El orquestador los coordina
+        en el orden correcto, delegando responsabilidades precisas y consolidando sus resultados
+        para entregar el flujo SDD completo.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===== RESUMEN RÁPIDO ===== -->
+  <section class="bg-blue-950 border-b border-blue-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div class="py-4">
+          <div class="text-3xl font-black text-white">1</div>
+          <div class="text-xs text-slate-400 mt-1">Orquestador</div>
+        </div>
+        <div class="py-4">
+          <div class="text-3xl font-black text-white">4</div>
+          <div class="text-xs text-slate-400 mt-1">Agentes de flujo SDD</div>
+        </div>
+        <div class="py-4">
+          <div class="text-3xl font-black text-emerald-400">Claude Opus 4.7</div>
+          <div class="text-xs text-slate-400 mt-1">Para planificación arquitectónica</div>
+        </div>
+        <div class="py-4">
+          <div class="text-3xl font-black text-emerald-400">Claude Sonnet 4.6</div>
+          <div class="text-xs text-slate-400 mt-1">Para implementación y docs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CARDS DE AGENTES ===== -->
+  <section class="bg-slate-50 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {agents.map(agent => {
+          const c = colorConfig[agent.color];
+          return (
+            <div class={`bg-white border-l-4 ${c.border} rounded-2xl shadow-sm overflow-hidden flex flex-col`}>
+              <div class="p-8 flex-1">
+                <!-- Header -->
+                <div class="flex items-start justify-between gap-4 mb-5">
+                  <div class="flex items-center gap-4">
+                    <div class={`w-12 h-12 ${c.icon} rounded-xl flex items-center justify-center text-2xl flex-shrink-0`}>
+                      {agent.icon}
+                    </div>
+                    <div>
+                      <h3 class="text-slate-900 font-black text-lg">{agent.name}</h3>
+                      <p class="text-slate-500 text-sm">{agent.role}</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-col items-end gap-1 flex-shrink-0">
+                    <span class={`${c.badge} ${c.badgeText} text-xs font-semibold px-3 py-1 rounded-full`}>
+                      {agent.model}
+                    </span>
+                    {'modelBadge' in agent && agent.modelBadge && (
+                      <span class="bg-purple-100 text-purple-700 text-xs font-semibold px-2 py-0.5 rounded-full">
+                        {agent.modelBadge}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                <!-- Description -->
+                <p class="text-slate-600 text-sm leading-relaxed mb-6">{agent.desc}</p>
+
+                <!-- Inputs / Outputs -->
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Entradas</p>
+                    <ul class="space-y-1">
+                      {agent.inputs.map(i => (
+                        <li class="text-slate-600 text-xs flex gap-1.5 leading-relaxed">
+                          <span class="text-slate-400 mt-0.5 flex-shrink-0">→</span>{i}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Salidas</p>
+                    <ul class="space-y-1">
+                      {agent.outputs.map(o => (
+                        <li class="text-slate-600 text-xs flex gap-1.5 leading-relaxed">
+                          <span class="text-emerald-500 mt-0.5 flex-shrink-0">✓</span>{o}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Delegates -->
+                {agent.delegates.length > 0 && (
+                  <div>
+                    <p class="text-slate-500 text-xs font-semibold uppercase tracking-wide mb-2">Delega a</p>
+                    <div class="flex flex-wrap gap-1.5">
+                      {agent.delegates.map(d => (
+                        <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded font-mono">
+                          {d}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== TABLA RESUMEN ===== -->
+  <section class="bg-white py-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Referencia rápida</p>
+        <h2 class="text-4xl font-black text-slate-900 tracking-tight">Tabla de Agentes</h2>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-left">
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Agente</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Rol</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Modelo</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Track</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {[
+                { name: 'tba-orchestrator', role: 'Orquestador Principal', model: 'Sonnet 4.6', track: 'Central' },
+                { name: 'context-analyzer', role: 'Analista de Contexto', model: 'Sonnet 4.6', track: 'Análisis' },
+                { name: 'architect-planner', role: 'Arquitecto y Planificador', model: 'Opus 4.7', track: 'Planificación' },
+                { name: 'code-implementor', role: 'Implementador de Código', model: 'Sonnet 4.6', track: 'Track B' },
+                { name: 'doc-generator', role: 'Generador de Documentación', model: 'Sonnet 4.6', track: 'Track A' },
+                { name: 'azure-integrator', role: 'Integrador Azure DevOps', model: 'Sonnet 4.6', track: 'Track A + Linking' },
+                { name: 'git-manager', role: 'Gestor de Versiones Git', model: 'Sonnet 4.6', track: 'Track B' },
+                { name: 'simple-implementor', role: 'Micro-Changes', model: 'Sonnet 4.6', track: 'Micro-change' },
+              ].map((row, i) => (
+                <tr class={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                  <td class="px-6 py-4 font-mono text-blue-700 text-xs font-semibold">{row.name}</td>
+                  <td class="px-6 py-4 text-slate-700">{row.role}</td>
+                  <td class="px-6 py-4">
+                    <span class={`text-xs font-semibold px-2.5 py-1 rounded-full ${row.model.includes('Opus') ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'}`}>
+                      {row.model}
+                    </span>
+                  </td>
+                  <td class="px-6 py-4">
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full">{row.track}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>

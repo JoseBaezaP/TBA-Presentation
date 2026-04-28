@@ -1,0 +1,255 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="CLI" description="TBA Agent CLI — Instalador interactivo multi-plataforma para el ecosistema HEB-Automata.">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-gradient-to-br from-blue-950 via-blue-900 to-slate-900 pt-28 pb-20 overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-400/10 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-emerald-400 text-sm font-semibold uppercase tracking-widest mb-4">Instalación</p>
+      <h1 class="text-6xl font-black text-white mb-5 tracking-tight">TBA Agent CLI</h1>
+      <p class="text-2xl text-blue-100 font-medium mb-6">Instalador Interactivo Multi-Plataforma</p>
+      <p class="text-slate-300 text-lg leading-relaxed max-w-3xl mb-8">
+        Herramienta de línea de comandos que configura el ecosistema completo de agentes especializados
+        y skills de automatización en el asistente de inteligencia artificial preferido del equipo.
+        Compatible con Claude Code, OpenCode y GitHub Copilot.
+      </p>
+      <div class="bg-blue-950/80 border border-blue-800 rounded-xl p-4 inline-block font-mono text-sm">
+        <span class="text-slate-500">$</span>
+        <span class="text-emerald-400 ml-2">npx github:jbaeza_hebgit/super-automata</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PLATAFORMAS COMPATIBLES ===== -->
+  <section class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Compatibilidad</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Plataformas Soportadas</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          HEB-Automata se adapta al ecosistema tecnológico de cada equipo, sin imponer una única herramienta.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            name: 'Claude Code',
+            by: 'Anthropic',
+            badge: 'Recomendado',
+            desc: 'Integración nativa completa. Los agentes se instalan en ~/.claude/agents/ y las skills en ~/.claude/skills/ con soporte total para el sistema de sub-agentes y Conventional Commits.',
+            features: ['Soporte de sub-agentes nativo', 'Skills como contexto de sistema', 'Modo interactivo y autónomo', 'Alcance global y por proyecto'],
+            color: 'emerald',
+          },
+          {
+            name: 'OpenCode',
+            by: 'Open Source',
+            badge: '',
+            desc: 'Integración completa para equipos que prefieren herramientas de código abierto. Los agentes y skills se instalan en las rutas de configuración de OpenCode.',
+            features: ['Compatibilidad con Anthropic API', 'Configuración global o por proyecto', 'Mismos agentes y skills', 'Sin vendor lock-in'],
+            color: 'blue',
+          },
+          {
+            name: 'GitHub Copilot',
+            by: 'Microsoft / GitHub',
+            badge: '',
+            desc: 'Instalación de instrucciones de sistema (.instructions.md) en la carpeta .github/copilot-instructions.md para integrar el flujo SDD en el ecosistema de GitHub.',
+            features: ['Instrucciones de sistema', 'Integración con GitHub Actions', 'Scope por repositorio', 'Compatible con VS Code'],
+            color: 'purple',
+          },
+        ].map(p => (
+          <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm flex flex-col">
+            <div class="flex items-start justify-between mb-5">
+              <div>
+                <h3 class="text-slate-900 font-bold text-xl">{p.name}</h3>
+                <p class="text-slate-500 text-sm">{p.by}</p>
+              </div>
+              {p.badge && (
+                <span class="bg-emerald-100 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full">{p.badge}</span>
+              )}
+            </div>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6 flex-1">{p.desc}</p>
+            <ul class="space-y-2">
+              {p.features.map(f => (
+                <li class="flex items-center gap-2 text-sm text-slate-600">
+                  <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full flex-shrink-0"></span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== COMANDOS ===== -->
+  <section class="bg-slate-50 py-24 border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Referencia</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Comandos Disponibles</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          Todos los comandos del CLI se ejecutan vía <code class="bg-slate-200 text-slate-800 px-2 py-0.5 rounded text-base font-mono">npx</code>, sin necesidad de instalación global previa.
+        </p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-left">
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Comando</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Descripción</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Uso típico</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {[
+                {
+                  cmd: 'npx github:jbaeza_hebgit/super-automata',
+                  desc: 'Instalación interactiva completa del ecosistema de agentes y skills.',
+                  use: 'Primera instalación',
+                },
+                {
+                  cmd: 'npx github:jbaeza_hebgit/super-automata install',
+                  desc: 'Equivalente al comando anterior. Inicia el asistente de configuración.',
+                  use: 'Primera instalación',
+                },
+                {
+                  cmd: 'npx github:jbaeza_hebgit/super-automata update',
+                  desc: 'Actualiza los agentes y skills a la última versión, conservando la configuración del usuario.',
+                  use: 'Actualización de versión',
+                },
+                {
+                  cmd: 'npx github:jbaeza_hebgit/super-automata add-product',
+                  desc: 'Agrega un nuevo producto o equipo a una instalación ya existente.',
+                  use: 'Multi-equipo',
+                },
+                {
+                  cmd: 'npx github:jbaeza_hebgit/super-automata version',
+                  desc: 'Muestra la versión instalada y la disponible en el repositorio.',
+                  use: 'Diagnóstico',
+                },
+              ].map((row, i) => (
+                <tr class={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                  <td class="px-6 py-4 font-mono text-blue-700 text-xs align-top">{row.cmd}</td>
+                  <td class="px-6 py-4 text-slate-600 align-top leading-relaxed">{row.desc}</td>
+                  <td class="px-6 py-4 align-top">
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full font-medium whitespace-nowrap">{row.use}</span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROCESO DE INSTALACIÓN ===== -->
+  <section class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Configuración</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Proceso de Instalación</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          El asistente interactivo guía al usuario en cuatro pasos para configurar el entorno completo.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {[
+          {
+            step: '01',
+            title: 'Seleccionar plataforma de IA',
+            desc: 'El usuario elige entre Claude Code, OpenCode o GitHub Copilot como plataforma destino de la instalación.',
+            detail: 'Esta selección determina las rutas de instalación y el formato de los archivos de configuración.',
+          },
+          {
+            step: '02',
+            title: 'Definir el alcance (scope)',
+            desc: 'Se define si la instalación es global (aplica a todos los proyectos del usuario) o local al proyecto actual.',
+            detail: 'Global: ~/.claude/agents/ — Local: .claude/agents/ (con .gitignore automático para tokens)',
+          },
+          {
+            step: '03',
+            title: 'Configurar Azure DevOps PAT',
+            desc: 'Se solicita el Personal Access Token de Azure DevOps para habilitar la creación de work items y la carga de documentación al Wiki.',
+            detail: 'El token se almacena localmente en un archivo excluido del repositorio git.',
+          },
+          {
+            step: '04',
+            title: 'Configurar producto y equipo',
+            desc: 'Se registra la información del equipo: nombre del producto, roles (PO, SM, líderes técnicos) y parámetros de Azure DevOps.',
+            detail: 'Organización, proyecto, área, wiki ID y nombre del TBA asignado.',
+          },
+        ].map(s => (
+          <div class="bg-slate-50 border border-slate-200 rounded-2xl p-8">
+            <div class="flex items-center gap-4 mb-5">
+              <div class="w-12 h-12 bg-blue-950 text-emerald-400 font-black text-lg rounded-xl flex items-center justify-center flex-shrink-0">
+                {s.step}
+              </div>
+              <h3 class="text-slate-900 font-bold text-xl">{s.title}</h3>
+            </div>
+            <p class="text-slate-700 leading-relaxed mb-4">{s.desc}</p>
+            <div class="bg-white border border-slate-200 rounded-xl p-4">
+              <p class="text-slate-500 text-sm font-mono leading-relaxed">{s.detail}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESULTADO ===== -->
+  <section class="bg-gradient-to-br from-blue-950 to-slate-900 py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-400 text-sm font-semibold uppercase tracking-widest mb-4">Resultado</p>
+        <h2 class="text-4xl font-black text-white mb-4 tracking-tight">¿Qué se instala?</h2>
+        <p class="text-slate-300 text-lg max-w-2xl mx-auto">
+          Al completar la instalación, el entorno de desarrollo queda listo para ejecutar el flujo SDD completo.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+        {[
+          { icon: '🤖', label: 'Agentes', desc: '8 agentes especializados en {dir}/agents/', color: 'blue' },
+          { icon: '⚡', label: 'Skills', desc: '13 skills de automatización en {dir}/skills/', color: 'emerald' },
+          { icon: '🔑', label: 'Configuración PAT', desc: 'Token seguro en skills/create-azure-workitems/config/', color: 'amber' },
+          { icon: '📋', label: 'Manifest', desc: 'Archivo .tba-manifest.json con versión y metadatos de la instalación', color: 'sky' },
+        ].map(r => (
+          <div class="bg-white/10 border border-white/10 rounded-2xl p-6 text-center backdrop-blur-sm">
+            <div class="text-4xl mb-4">{r.icon}</div>
+            <h3 class="text-white font-bold mb-2">{r.label}</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">{r.desc}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SCREENSHOT CLI ===== -->
+  <section class="bg-white py-24 border-t border-slate-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden">
+        <div class="bg-slate-200 px-4 py-3 flex items-center gap-2">
+          <div class="w-3 h-3 rounded-full bg-red-400"></div>
+          <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+          <div class="w-3 h-3 rounded-full bg-emerald-400"></div>
+          <span class="ml-2 text-slate-500 text-xs font-mono">Terminal</span>
+        </div>
+        <div class="p-8 aspect-[16/6] flex flex-col items-center justify-center gap-3">
+          <div class="w-12 h-12 bg-slate-200 rounded-xl flex items-center justify-center">
+            <span class="text-2xl">📸</span>
+          </div>
+          <p class="text-slate-500 text-sm font-medium">Captura de pantalla del CLI en funcionamiento</p>
+          <p class="text-slate-400 text-xs">Proporcionar imagen: screenshot del proceso de instalación interactivo</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Layout>

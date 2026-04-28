@@ -1,0 +1,300 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const colorMap: Record<string, string> = {
+  slate: 'bg-slate-100 border-slate-300 text-slate-600',
+  blue: 'bg-blue-100 border-blue-300 text-blue-700',
+  orange: 'bg-orange-100 border-orange-300 text-orange-700',
+  purple: 'bg-purple-100 border-purple-300 text-purple-700',
+  amber: 'bg-amber-100 border-amber-300 text-amber-700',
+  emerald: 'bg-emerald-100 border-emerald-300 text-emerald-700',
+  sky: 'bg-sky-100 border-sky-300 text-sky-700',
+};
+---
+
+<Layout title="Orquestador" description="TBA Orchestrator: el agente principal que coordina el flujo SDD completo de HEB-Automata.">
+
+  <!-- ===== HERO ===== -->
+  <section class="bg-gradient-to-br from-blue-950 via-indigo-950 to-slate-900 pt-28 pb-20 overflow-hidden relative">
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-20 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <p class="text-emerald-400 text-sm font-semibold uppercase tracking-widest mb-4">Agente Principal</p>
+      <h1 class="text-6xl font-black text-white mb-5 tracking-tight">TBA Orchestrator</h1>
+      <p class="text-2xl text-blue-100 font-medium mb-6">El Cerebro del Sistema de Automatización</p>
+      <p class="text-slate-300 text-lg leading-relaxed max-w-3xl mb-8">
+        El orquestador es el agente central que recibe cada solicitud, la clasifica automáticamente,
+        coordina a los agentes especializados y valida la consistencia del proceso en cada etapa
+        mediante un riguroso sistema de <em>gates</em>.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <div class="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white font-medium">
+          Modelo: <span class="text-emerald-400 font-bold">Claude Sonnet 4.6</span>
+        </div>
+        <div class="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white font-medium">
+          6 Gates de validación
+        </div>
+        <div class="bg-white/10 border border-white/20 rounded-xl px-5 py-3 text-sm text-white font-medium">
+          2 Flujos: Micro-change / SDD
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== RESPONSABILIDADES ===== -->
+  <section class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Rol en el sistema</p>
+          <h2 class="text-4xl font-black text-slate-900 mb-6 tracking-tight">Coordinador Inteligente</h2>
+          <p class="text-slate-600 text-lg leading-relaxed mb-6">
+            El orquestador actúa como punto de entrada único para todas las solicitudes de desarrollo.
+            Su primera tarea es <strong class="text-slate-900">clasificar automáticamente</strong> si la
+            petición corresponde a un <em>micro-change</em> (cambio puntual de valor, color o texto)
+            o a un <em>flujo SDD completo</em> (nueva funcionalidad, API o lógica de negocio).
+          </p>
+          <p class="text-slate-600 text-lg leading-relaxed mb-6">
+            A diferencia de un agente reactivo, el orquestador es <strong class="text-slate-900">
+            opinionado</strong>: en cada gate cuestiona activamente inconsistencias, ambigüedades y
+            criterios faltantes antes de delegar a los agentes especializados.
+          </p>
+          <p class="text-slate-600 text-lg leading-relaxed">
+            Adicionalmente, detecta sesiones previas interrumpidas y ofrece reanudación desde
+            el punto exacto de parada, garantizando continuidad sin pérdida de trabajo.
+          </p>
+        </div>
+        <div class="space-y-4">
+          {[
+            { icon: '🔍', title: 'Clasificación Automática', desc: 'Determina si la solicitud es un micro-change o un flujo SDD completo sin intervención del usuario.' },
+            { icon: '🎯', title: 'Delegación Precisa', desc: 'Coordina a los ocho agentes especializados asignando responsabilidades claras en cada fase.' },
+            { icon: '🛡️', title: 'Gates de Validación', desc: 'Seis puntos de control que verifican consistencia, calidad y alineación antes de continuar.' },
+            { icon: '🔄', title: 'Reanudación de Sesión', desc: 'Detecta y retoma sesiones interrumpidas desde cualquier fase del flujo.' },
+          ].map(r => (
+            <div class="flex gap-4 bg-slate-50 border border-slate-200 rounded-xl p-5">
+              <div class="text-2xl flex-shrink-0">{r.icon}</div>
+              <div>
+                <h3 class="font-bold text-slate-900 mb-1">{r.title}</h3>
+                <p class="text-slate-600 text-sm leading-relaxed">{r.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CLASIFICACIÓN ===== -->
+  <section class="bg-slate-50 py-24 border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Lógica de decisión</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Clasificación de Solicitudes</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          El orquestador determina automáticamente el flujo correcto según la naturaleza del cambio solicitado.
+        </p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white border-2 border-amber-300 rounded-2xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center text-xl">⚡</div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Micro-Change</h3>
+              <p class="text-amber-600 text-xs font-semibold uppercase tracking-wide">Flujo simplificado</p>
+            </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Cambios puntuales que no requieren el flujo SDD completo. El orquestador delega directamente
+            al agente <strong>simple-implementor</strong> para una ejecución rápida.
+          </p>
+          <div class="bg-amber-50 rounded-xl p-4 mb-5">
+            <p class="text-amber-800 text-xs font-semibold uppercase tracking-wide mb-3">Ejemplos</p>
+            <ul class="space-y-1.5 text-sm text-amber-900">
+              <li class="flex gap-2"><span>—</span> Cambio de valor numérico o umbral</li>
+              <li class="flex gap-2"><span>—</span> Modificación de texto o etiqueta</li>
+              <li class="flex gap-2"><span>—</span> Actualización de color o imagen</li>
+              <li class="flex gap-2"><span>—</span> Cambio de constante de configuración</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-sm font-medium text-amber-700">
+            <span class="w-2 h-2 bg-amber-500 rounded-full"></span>
+            Identificar archivo → Aplicar cambio → Commit → Push (opcional)
+          </div>
+        </div>
+        <div class="bg-white border-2 border-blue-400 rounded-2xl p-8">
+          <div class="flex items-center gap-3 mb-6">
+            <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-xl">🏗️</div>
+            <div>
+              <h3 class="text-xl font-bold text-slate-900">Flujo SDD Completo</h3>
+              <p class="text-blue-600 text-xs font-semibold uppercase tracking-wide">Software Development Driven</p>
+            </div>
+          </div>
+          <p class="text-slate-600 text-sm leading-relaxed mb-5">
+            Para nuevas funcionalidades, APIs, lógica de negocio o refactorizaciones significativas que
+            requieren análisis, planificación, documentación e implementación coordinada.
+          </p>
+          <div class="bg-blue-50 rounded-xl p-4 mb-5">
+            <p class="text-blue-800 text-xs font-semibold uppercase tracking-wide mb-3">Ejemplos</p>
+            <ul class="space-y-1.5 text-sm text-blue-900">
+              <li class="flex gap-2"><span>—</span> Nueva endpoint o servicio</li>
+              <li class="flex gap-2"><span>—</span> Módulo de dominio completo</li>
+              <li class="flex gap-2"><span>—</span> Integración con sistema externo</li>
+              <li class="flex gap-2"><span>—</span> Caso de uso con lógica compleja</li>
+            </ul>
+          </div>
+          <div class="flex items-center gap-2 text-sm font-medium text-blue-700">
+            <span class="w-2 h-2 bg-blue-500 rounded-full"></span>
+            Análisis → Planificación → Track A + B en paralelo → Entrega
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FASES DEL FLUJO ===== -->
+  <section class="bg-white py-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Proceso</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Fases del Flujo SDD</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          El orquestador gestiona cada fase de forma secuencial, con validación rigurosa entre etapas.
+        </p>
+      </div>
+      <div class="space-y-4 max-w-4xl mx-auto">
+        {[
+          {
+            phase: 'Pre-Fase',
+            label: 'Detección de Sesión Previa',
+            color: 'slate',
+            desc: 'Al iniciar, el orquestador verifica si existe un archivo .tba-state.json de una sesión anterior. Si lo encuentra, ofrece al usuario la opción de reanudar desde la fase exacta donde se interrumpió.',
+            agent: null,
+          },
+          {
+            phase: 'Fase 0',
+            label: 'Clasificación y Configuración',
+            color: 'blue',
+            desc: 'Determina si la solicitud es micro-change o SDD completo. Para SDD, pregunta las preferencias: ¿generar documentación? ¿publicar en Azure DevOps? ¿incluir pruebas unitarias?',
+            agent: null,
+          },
+          {
+            phase: 'Gate 0',
+            label: 'Challenge del PRD',
+            color: 'orange',
+            desc: 'El orquestador cuestiona activamente el PRD: detecta criterios faltantes, ambigüedades de alcance y solicita diseños o especificaciones de datos si el contexto lo requiere. Bloquea el flujo hasta obtener respuestas.',
+            agent: null,
+          },
+          {
+            phase: 'Fase 1',
+            label: 'Análisis de Iniciativa y Arquitectura',
+            color: 'purple',
+            desc: 'Delega al context-analyzer para extraer grupos de funcionalidades con escenarios Gherkin (iniciativa.json) y detectar la arquitectura del proyecto (architecture-constraints.json).',
+            agent: 'context-analyzer',
+          },
+          {
+            phase: 'Fase 2',
+            label: 'Planificación de Implementación',
+            color: 'amber',
+            desc: 'Delega al architect-planner para generar un plan detallado file-by-file con user stories, plan de pruebas y plan de commits (implementation-plan.json), respetando la arquitectura detectada.',
+            agent: 'architect-planner',
+          },
+          {
+            phase: 'Fase 3',
+            label: 'Ejecución Paralela: Track A + Track B',
+            color: 'emerald',
+            desc: 'Track A: doc-generator genera documentación técnica y azure-integrator crea los work items. Track B: git-manager crea la rama, code-implementor escribe código y pruebas, git-manager hace commits. Ambos tracks corren simultáneamente.',
+            agent: 'doc-generator + code-implementor',
+          },
+          {
+            phase: 'Fase 4',
+            label: 'Linking y Resumen Final',
+            color: 'sky',
+            desc: 'azure-integrator vincula los commits de git a los work items de Azure DevOps para trazabilidad completa. El orquestador presenta un resumen de todo lo logrado: documentación, work items, commits, pruebas y cualquier error no bloqueante.',
+            agent: 'azure-integrator',
+          },
+        ].map(f => {
+          const badgeColor = colorMap[f.color] || colorMap['slate'];
+          return (
+            <div class="bg-white border border-slate-200 rounded-2xl p-6 flex gap-6 shadow-sm">
+              <div class="flex-shrink-0">
+                <span class={`inline-block text-xs font-bold px-3 py-1.5 rounded-lg border ${badgeColor} whitespace-nowrap`}>
+                  {f.phase}
+                </span>
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center gap-3 mb-2 flex-wrap">
+                  <h3 class="font-bold text-slate-900">{f.label}</h3>
+                  {f.agent && (
+                    <span class="bg-slate-100 text-slate-600 text-xs px-2 py-0.5 rounded-full font-mono">
+                      {f.agent}
+                    </span>
+                  )}
+                </div>
+                <p class="text-slate-600 text-sm leading-relaxed">{f.desc}</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GATES ===== -->
+  <section class="bg-slate-50 py-24 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16">
+        <p class="text-emerald-600 text-sm font-semibold uppercase tracking-widest mb-4">Control de calidad</p>
+        <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tight">Sistema de Gates</h2>
+        <p class="text-slate-600 text-lg max-w-2xl mx-auto">
+          Puntos de control estratégicos que garantizan la consistencia y calidad en cada transición de fase.
+        </p>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-slate-900 text-left">
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">Gate</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">¿Qué valida?</th>
+                <th class="text-slate-300 font-semibold px-6 py-4 text-xs uppercase tracking-wide">¿Bloquea?</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              {[
+                { gate: 'Gate 0', what: 'Criterios de aceptación faltantes, ambigüedades en el PRD, diseños o especificaciones de datos no provistos.', blocks: true },
+                { gate: 'Gate 1', what: 'Confianza de grupos detectados, completitud de escenarios Gherkin, arquitectura reconocida correctamente.', blocks: false },
+                { gate: 'Gate 2', what: 'Respeto a la arquitectura existente, cobertura de pruebas en el plan, dependencias excesivas.', blocks: false },
+                { gate: 'Gate 3A', what: 'Errores en generación de documentación, inconsistencias en Requirements.json o TR.md.', blocks: false },
+                { gate: 'Checkpoint', what: 'Pausa obligatoria: el usuario revisa el código implementado en la rama local antes de autorizar el push al remoto.', blocks: true },
+                { gate: 'Gate 3B', what: 'Pruebas fallidas, desviaciones significativas del plan de implementación.', blocks: false },
+                { gate: 'Gate 4', what: 'Resumen informativo final: documentación generada, work items creados, commits realizados, errores acumulados.', blocks: false },
+              ].map((g, i) => (
+                <tr class={i % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                  <td class="px-6 py-4 font-semibold text-slate-900 whitespace-nowrap align-top">{g.gate}</td>
+                  <td class="px-6 py-4 text-slate-600 leading-relaxed align-top">{g.what}</td>
+                  <td class="px-6 py-4 align-top">
+                    {g.blocks ? (
+                      <span class="inline-flex items-center gap-1.5 bg-red-50 text-red-700 text-xs font-semibold px-3 py-1 rounded-full border border-red-200">
+                        <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>Sí
+                      </span>
+                    ) : (
+                      <span class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-semibold px-3 py-1 rounded-full border border-emerald-200">
+                        <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span>No
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="text-slate-500 text-sm mt-4 text-center">
+        Los gates no bloqueantes acumulan advertencias y las reportan en el Gate 4 final sin detener el flujo.
+      </p>
+    </div>
+  </section>
+
+</Layout>
