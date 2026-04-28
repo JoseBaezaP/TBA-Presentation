@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Inicio" description="HEB-Automata: automatización inteligente del ciclo de desarrollo de software mediante agentes especializados de IA.">
@@ -29,10 +30,10 @@ import Layout from '../layouts/Layout.astro';
           un único punto de entrada.
         </p>
         <div class="flex flex-wrap gap-4">
-          <a href="/orquestador" class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-xl shadow-emerald-500/30 hover:-translate-y-0.5">
+          <a href={`${base}orquestador`} class="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 shadow-xl shadow-emerald-500/30 hover:-translate-y-0.5">
             Explorar el Sistema
           </a>
-          <a href="/flujo-sdd" class="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 border border-white/20">
+          <a href={`${base}flujo-sdd`} class="bg-white/10 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-xl transition-all duration-200 border border-white/20">
             Ver Flujo SDD &rarr;
           </a>
         </div>
@@ -208,7 +209,7 @@ import Layout from '../layouts/Layout.astro';
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[
           {
-            href: '/cli',
+            href: `${base}cli`,
             icon: '⌨️',
             color: 'blue',
             title: 'TBA Agent CLI',
@@ -216,7 +217,7 @@ import Layout from '../layouts/Layout.astro';
             desc: 'Herramienta de línea de comandos que instala y configura el ecosistema completo de agentes y skills en Claude Code, OpenCode o GitHub Copilot.',
           },
           {
-            href: '/orquestador',
+            href: `${base}orquestador`,
             icon: '🧠',
             color: 'purple',
             title: 'TBA Orchestrator',
@@ -224,7 +225,7 @@ import Layout from '../layouts/Layout.astro';
             desc: 'Agente principal que coordina el flujo SDD completo, clasificando cada solicitud y delegando a los agentes especializados con validación en cada gate.',
           },
           {
-            href: '/agentes',
+            href: `${base}agentes`,
             icon: '🤖',
             color: 'amber',
             title: '8 Agentes Especializados',
@@ -232,7 +233,7 @@ import Layout from '../layouts/Layout.astro';
             desc: 'Desde el análisis de arquitectura hasta la integración con Azure DevOps, cada agente domina una parte específica del proceso de desarrollo.',
           },
           {
-            href: '/skills',
+            href: `${base}skills`,
             icon: '⚡',
             color: 'emerald',
             title: '13 Skills de Automatización',
@@ -240,7 +241,7 @@ import Layout from '../layouts/Layout.astro';
             desc: 'Skills especializados que los agentes invocan para ejecutar tareas concretas: análisis, planificación, implementación, documentación e integración.',
           },
           {
-            href: '/flujo-sdd',
+            href: `${base}flujo-sdd`,
             icon: '🔄',
             color: 'sky',
             title: 'Flujo SDD',
@@ -248,7 +249,7 @@ import Layout from '../layouts/Layout.astro';
             desc: 'Proceso estructurado de análisis → planificación → ejecución paralela (Track A: docs + Track B: código) con gates de validación en cada etapa.',
           },
           {
-            href: '/flujo-sdd',
+            href: `${base}flujo-sdd`,
             icon: '🔗',
             color: 'rose',
             title: 'Integración Azure DevOps',
