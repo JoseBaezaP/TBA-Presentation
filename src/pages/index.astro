@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import claudeWorking from '../assets/cluade-working.png';
 const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 ---
 
@@ -39,15 +41,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </div>
 
-      <!-- Placeholder imagen principal -->
-      <div class="mt-16 bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-        <div class="aspect-[16/7] flex flex-col items-center justify-center gap-3">
-          <div class="w-16 h-16 bg-white/10 rounded-2xl flex items-center justify-center">
-            <span class="text-3xl">🖼️</span>
-          </div>
-          <p class="text-slate-400 text-sm font-medium">Imagen principal del sistema</p>
-          <p class="text-slate-600 text-xs">Proporcionar: screenshot, diagrama de arquitectura o logotipo del proyecto</p>
-        </div>
+      <!-- Imagen principal del sistema -->
+      <div class="mt-16 rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-blue-950/50">
+        <Image
+          src={claudeWorking}
+          alt="Claude Code ejecutando el flujo SDD con el orquestador HEB-Automata"
+          class="w-full object-cover"
+        />
       </div>
     </div>
   </section>
