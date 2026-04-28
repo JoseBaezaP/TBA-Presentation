@@ -10,19 +10,19 @@ const {
 } = Astro.props;
 
 const pathname = Astro.url.pathname;
-const base = import.meta.env.BASE_URL; // '/TBA-Presentation/'
+const base = import.meta.env.BASE_URL.replace(/\/$/, ''); // '/TBA-Presentation' sin barra final
 
 const navItems = [
-  { href: base, label: 'Inicio' },
-  { href: `${base}cli`, label: 'CLI' },
-  { href: `${base}orquestador`, label: 'Orquestador' },
-  { href: `${base}agentes`, label: 'Agentes' },
-  { href: `${base}skills`, label: 'Skills' },
-  { href: `${base}flujo-sdd`, label: 'Flujo SDD' },
+  { href: `${base}/`, label: 'Inicio' },
+  { href: `${base}/cli`, label: 'CLI' },
+  { href: `${base}/orquestador`, label: 'Orquestador' },
+  { href: `${base}/agentes`, label: 'Agentes' },
+  { href: `${base}/skills`, label: 'Skills' },
+  { href: `${base}/flujo-sdd`, label: 'Flujo SDD' },
 ];
 
 function isActive(href: string): boolean {
-  if (href === base) return pathname === base || pathname === base.slice(0, -1);
+  if (href === `${base}/`) return pathname === `${base}/` || pathname === base;
   return pathname.startsWith(href);
 }
 ---
@@ -43,7 +43,7 @@ function isActive(href: string): boolean {
         <div class="flex items-center justify-between h-16">
 
           <!-- Logotipo -->
-          <a href={base} class="flex items-center gap-3">
+          <a href={`${base}/`} class="flex items-center gap-3">
             <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center font-black text-white text-sm shadow-lg shadow-emerald-500/30">
               HA
             </div>
@@ -85,7 +85,7 @@ function isActive(href: string): boolean {
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
 
           <div class="md:col-span-2">
-            <a href={base} class="flex items-center gap-3 mb-5">
+            <a href={`${base}/`} class="flex items-center gap-3 mb-5">
               <div class="w-9 h-9 bg-emerald-500 rounded-xl flex items-center justify-center font-black text-white text-sm">
                 HA
               </div>
